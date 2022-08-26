@@ -12,7 +12,7 @@ const diceEl = document.querySelector('.dice');
 const btnNew = document.querySelector('.btn--new');
 const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
-
+const winningCondition = prompt('Please set a the winning score');
 let scores = [0,0]
 score0El.textContent = 0;
 score1El.textContent = 0;
@@ -56,7 +56,7 @@ btnHold.addEventListener('click',_event => {
     document.getElementById(`score--${player}`).textContent = scores[player]
 
     //**check score >=100 */
-    if(scores[player] >= 10) {
+    if(scores[player] >= winningCondition) {
         isActive = false;
         document.querySelector(`.player--${player}`).classList.add('player--winner');
         document.querySelector(`.player--${player}`).classList.remove('player--active');
