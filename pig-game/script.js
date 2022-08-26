@@ -8,11 +8,16 @@ const current0El = document.getElementById('current--0');
 const current1El = document.getElementById('current--1');
 
 const diceEl = document.querySelector('.dice');
+
+//**gen random number*/
+
+const diceRoll = () => Math.trunc(Math.random() * 6) + 1
+const dice = diceRoll()
 //**buttons */
 const btnNew = document.querySelector('.btn--new');
 const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
-const winningCondition = prompt('Please set a the winning score');
+const winningCondition = Number(prompt('Please set a the winning score'));
 let scores = [0,0]
 score0El.textContent = 0;
 score1El.textContent = 0;
@@ -21,8 +26,10 @@ let isActive = true;
 
 //**switch player functionality */
 const playerSwithcer = () => {
-    document.getElementById(`current--${player}`).textContent = 0    
-    player = player === 0 ? 1 : 0 
+    document.getElementById(`current--${player}`).textContent = 0  
+
+        player = player === 0 ? 1 : 0 
+
     currentScore = 0;
     //** if the class is not there, then add it */
     player0El.classList.toggle('player--active');
@@ -34,7 +41,7 @@ let player = 0;
 btnRoll,addEventListener('click',_event => {
     //** generate random roll*/
     if (isActive){
-    const dice = Math.trunc(Math.random() * 6) + 1
+    
 
     //** display the dice*/
     diceEl.classList.remove('hidden');
@@ -55,12 +62,17 @@ btnHold.addEventListener('click',_event => {
     scores[player] += currentScore
     document.getElementById(`score--${player}`).textContent = scores[player]
 
-    //**check score >=100 */
-    if(scores[player] >= winningCondition) {
+     if(scores[player] >= winningCondition) {  //**check score >=100 */
         isActive = false;
         document.querySelector(`.player--${player}`).classList.add('player--winner');
         document.querySelector(`.player--${player}`).classList.remove('player--active');
         diceEl.classList.add('hidden');
+        btnHold.addEventListener('click', _event => {
+            btnHold.disabled = true;
+            scores[!player] -= dice;
+            
+        })
+        
     }else{
         playerSwithcer();
     }
@@ -84,5 +96,7 @@ btnNew.addEventListener('click',_event => {
     player0El.classList.add('player--active');
     player1El.classList.remove('player--active');
     diceEl.classList.add('hidden');
+    // document.querySelector('.btn--roll').classList.add('btn--roll');
+    // document.querySelector('.btn--hold').classList.add('btn--hold');
     
 })
