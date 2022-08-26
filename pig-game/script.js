@@ -69,7 +69,7 @@ btnHold.addEventListener('click',_event => {
         diceEl.classList.add('hidden');
         btnHold.addEventListener('click', _event => {
             btnHold.disabled = true;
-            scores[!player] -= dice;
+        //**TODO: stop adding after the the condition is reached */
             
         })
         
@@ -77,8 +77,7 @@ btnHold.addEventListener('click',_event => {
         playerSwithcer();
     }
 
-    //** */
-    
+
 })
 
 btnNew.addEventListener('click',_event => {
@@ -96,6 +95,7 @@ btnNew.addEventListener('click',_event => {
     player0El.classList.add('player--active');
     player1El.classList.remove('player--active');
     diceEl.classList.add('hidden');
+    btnHold.disabled = false;
     // document.querySelector('.btn--roll').classList.add('btn--roll');
     // document.querySelector('.btn--hold').classList.add('btn--hold');
     
