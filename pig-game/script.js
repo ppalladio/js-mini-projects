@@ -38,7 +38,7 @@ btnRoll,addEventListener('click',_event => {
 
     //** display the dice*/
     diceEl.classList.remove('hidden');
-    diceEl.src = `dice-${dice}.png`
+    diceEl.src = `./img/dice-${dice}.png`
     //**check for value === 1 */
     if (dice !==1 ){
         currentScore += dice;
