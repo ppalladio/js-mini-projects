@@ -56,3 +56,24 @@ const game = {
 
     team1 < team2 && console.log('team1 is more likely to win');
     team1 > team2 && console.log('team2 is more likely to win');
+
+/**
+ * *part 2
+ */
+
+// for (const [i, player] of game.scored.entries()) {
+//     console.log(`goal ${goal [i] +1}: + player[i]`);
+// }
+const value = Object.values(game.odds)
+avg = 0;
+for (const i of value)
+ avg += i
+ avg/=value.length
+ console.log(avg);
+
+ for(const [team, odd] of Object.entries(game.odds)){
+    const teamStr = team === 'x' ? 'draw' :  `victory ${game[team]}` 
+
+    console.log(`odd of ${teamStr} ${odd}`);
+
+ }
