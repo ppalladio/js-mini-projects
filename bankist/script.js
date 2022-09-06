@@ -99,13 +99,28 @@ const calcBalance = (movements) => {
 
 calcBalance(account1.movements);
 
+const calcDisplayBalance = (movements) => {
+    const income = movements
+        .filter((mov) => mov >= 0)
+        .reduce((acc, mov) => acc + mov, 0);
+    const expense = movements
+        .filter((mov) => mov <= 0)
+        .reduce((acc, mov) => acc + mov, 0);
+    const interest = movements
+        .filter((mov) => mov >= 0)
+        .map((mov) => (mov * 1.2) / 100)
+        .filter((mov) => mov >= 1)
+        .reduce((acc, int) => acc + int, 0);
+    labelSumIn.textContent = `${income}€`;
+    labelSumOut.textContent = `${expense}€`;
+    labelSumInterest.textContent = `${interest}€`;
+};
 
+calcDisplayBalance(account1.movements);
 
-
-
-
-const max = movements.reduce((acc, mov) =>{
-    if (acc > mov )
-    return acc;
-    else {return mov}
-},movements[0])
+const max = movements.reduce((acc, mov) => {
+    if (acc > mov) return acc;
+    else {
+        return mov;
+    }
+}, movements[0]);
