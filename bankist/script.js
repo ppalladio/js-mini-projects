@@ -78,8 +78,6 @@ const displayMovements = (movements) => {
     });
 };
 
-displayMovements(account1.movements);
-
 const createUserName = (accs) => {
     accs.forEach((acc) => {
         acc.username = acc.owner
@@ -97,18 +95,16 @@ const calcBalance = (movements) => {
     labelBalance.textContent = `${balance} €`;
 };
 
-calcBalance(account1.movements);
-
-const calcDisplayBalance = (movements) => {
-    const income = movements
+const calcDisplayBalance = (account) => {
+    const income = account.movements
         .filter((mov) => mov >= 0)
         .reduce((acc, mov) => acc + mov, 0);
-    const expense = movements
+    const expense = account.movements
         .filter((mov) => mov <= 0)
         .reduce((acc, mov) => acc + mov, 0);
-    const interest = movements
+    const interest = account.movements
         .filter((mov) => mov >= 0)
-        .map((mov) => (mov * 1.2) / 100)
+        .map((mov) => (mov * account.interestRate) / 100)
         .filter((mov) => mov >= 1)
         .reduce((acc, int) => acc + int, 0);
     labelSumIn.textContent = `${income}€`;
@@ -116,7 +112,28 @@ const calcDisplayBalance = (movements) => {
     labelSumInterest.textContent = `${interest}€`;
 };
 
-calcDisplayBalance(account1.movements);
+let currentAccount;
+btnLogin.addEventListener('click', (e) => {
+    e.preventDefault();
+    currentAccount = accounts.find(
+        (acc) => acc.username === inputLoginUsername.value,
+    );
+    if (currentAccount?.pin === Number(inputLoginPin.value)) {
+        labelWelcome.textContent = ` Welcome back, ${
+            currentAccount.owner.split(' ')[0]
+        }`;
+        containerApp.style.opacity = 100;
+
+        inputLoginUsername.value = inputLoginPin.value = '';
+        inputLoginPin.blur();
+        displayMovements(currentAccount.movements);
+        calcBalance(currentAccount.movements);
+        calcDisplayBalance(currentAccount);
+    } else {
+        containerApp.style.opacity = 0;
+        prompt.textContent = 'Wrong username or password';
+    }
+});
 
 const max = movements.reduce((acc, mov) => {
     if (acc > mov) return acc;
