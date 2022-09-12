@@ -92,7 +92,7 @@ createUserName(accounts);
 
 const calcBalance = (acc) => {
     const balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-
+    acc.balance = balance;
     labelBalance.textContent = `${acc.balance} €`;
 };
 
@@ -141,12 +141,12 @@ btnTransfer.addEventListener('click', (e) => {
     e.preventDefault();
     const amount = inputTransferAmount.value;
     const receiverAccount = accounts.find(
-        (acc) => acc.username === inputTransfer.value,
+        (acc) => acc.username === inputTransferTo.value,
     );
     if (
         amount >= 0 &&
         receiverAccount &&
-        amount <= currentAccount.balance.toNumber() &&
+        amount <= currentAccount.balance * 1 &&
         receiverAccount.username !== currentAccount.username
     ) {
         currentAccount.movements.push(-amount);
@@ -159,20 +159,34 @@ btnTransfer.addEventListener('click', (e) => {
 
 btnLoan.addEventListener('click', (e) => {
     e.preventDefault();
-    const amount = inputLoanAmount.value.toNumber();
-    if (amount >0 && currentAccount.movements.some(mov => mov >= amount *0.1)) {
-        currentAccount.movements.push(amount)
+    const amount = inputLoanAmount.value * 1;
+    if (
+        amount > 0 &&
+        currentAccount.movements.some((mov) => mov >= amount * 0.1)
+    ) {
+        currentAccount.movements.push(amount);
 
-    updateUI(currentAccount);
+        updateUI(currentAccount);
     }
     inputLoanAmount.value = '';
     inputLoanAmount.blur();
-
-})
+});
 
 //**delete account */
 
 btnClose.addEventListener('click', (e) => {
     e.preventDefault();
-    
-})
+    if (
+        inputClosePin.value * 1 === currentAccount.pin &&
+        inputCloseUsername.value === currentAccount.username
+    ) {
+        const index = accounts.findIndex((acc) => {
+            return acc.username === currentAccount.username;
+        });
+
+        accounts.splice(index, 1);
+
+        containerApp.style.opacity = 0;
+        labelWelcome.textContent = 'Log in to get started'
+    }
+});
