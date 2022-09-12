@@ -61,10 +61,10 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = (movements) => {
-    // containerMovements.innerHTML = '';
-
-    movements.forEach((mov, i) => {
+const displayMovements = (movements, sort = false) => {
+    containerMovements.innerHTML = '';
+    const move = sort ? movements.slice().sort((a, b) => a - b) : movements;
+    move.forEach((mov, i) => {
         const type = mov > 0 ? 'deposit' : 'withdrawal';
         const html = ` <div class="movements">
         <div class="movements__row">
@@ -117,7 +117,9 @@ const updateUI = (acc) => {
     calcBalance(currentAccount);
     calcDisplayBalance(currentAccount);
 };
+
 let currentAccount;
+
 btnLogin.addEventListener('click', (e) => {
     e.preventDefault();
     currentAccount = accounts.find(
@@ -187,6 +189,14 @@ btnClose.addEventListener('click', (e) => {
         accounts.splice(index, 1);
 
         containerApp.style.opacity = 0;
-        labelWelcome.textContent = 'Log in to get started'
+        labelWelcome.textContent = 'Log in to get started';
     }
+});
+
+//** sort btn */
+let sorted = false;
+btnSort.addEventListener('click', (e) => {
+    e.preventDefault();
+    displayMovements(currentAccount.movements, !sorted);
+    sorted = !sorted;
 });
