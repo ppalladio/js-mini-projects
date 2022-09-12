@@ -90,9 +90,10 @@ const createUserName = (accs) => {
 
 createUserName(accounts);
 
-const calcBalance = (movements) => {
-    const balance = movements.reduce((acc, mov) => acc + mov, 0);
-    labelBalance.textContent = `${balance} €`;
+const calcBalance = (acc) => {
+    const balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+
+    labelBalance.textContent = `${acc.balance} €`;
 };
 
 const calcDisplayBalance = (account) => {
@@ -111,7 +112,11 @@ const calcDisplayBalance = (account) => {
     labelSumOut.textContent = `${expense}€`;
     labelSumInterest.textContent = `${interest}€`;
 };
-
+const updateUI = (acc) => {
+    displayMovements(currentAccount.movements);
+    calcBalance(currentAccount);
+    calcDisplayBalance(currentAccount);
+};
 let currentAccount;
 btnLogin.addEventListener('click', (e) => {
     e.preventDefault();
@@ -123,21 +128,51 @@ btnLogin.addEventListener('click', (e) => {
             currentAccount.owner.split(' ')[0]
         }`;
         containerApp.style.opacity = 100;
-
         inputLoginUsername.value = inputLoginPin.value = '';
         inputLoginPin.blur();
-        displayMovements(currentAccount.movements);
-        calcBalance(currentAccount.movements);
-        calcDisplayBalance(currentAccount);
+        updateUI(currentAccount);
     } else {
-        containerApp.style.opacity = 0;
-        prompt.textContent = 'Wrong username or password';
+        // containerApp.style.opacity = 0;
     }
 });
 
-const max = movements.reduce((acc, mov) => {
-    if (acc > mov) return acc;
-    else {
-        return mov;
+//** transfer */
+btnTransfer.addEventListener('click', (e) => {
+    e.preventDefault();
+    const amount = inputTransferAmount.value;
+    const receiverAccount = accounts.find(
+        (acc) => acc.username === inputTransfer.value,
+    );
+    if (
+        amount >= 0 &&
+        receiverAccount &&
+        amount <= currentAccount.balance.toNumber() &&
+        receiverAccount.username !== currentAccount.username
+    ) {
+        currentAccount.movements.push(-amount);
+        receiverAccount.movements.push(amount);
+        updateUI(currentAccount);
     }
-}, movements[0]);
+});
+
+//** loan */ */
+
+btnLoan.addEventListener('click', (e) => {
+    e.preventDefault();
+    const amount = inputLoanAmount.value.toNumber();
+    if (amount >0 && currentAccount.movements.some(mov => mov >= amount *0.1)) {
+        currentAccount.movements.push(amount)
+
+    updateUI(currentAccount);
+    }
+    inputLoanAmount.value = '';
+    inputLoanAmount.blur();
+
+})
+
+//**delete account */
+
+btnClose.addEventListener('click', (e) => {
+    e.preventDefault();
+    
+})
